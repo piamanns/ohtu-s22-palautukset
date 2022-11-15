@@ -26,9 +26,10 @@ def main():
     print(f"\nPlayers from {nationality} {datetime.now()}")
     print()
 
-    for player in players:
-        if player.nationality == nationality:
-            print(player)
+    players_filtered = filter(lambda p : p.nationality == nationality, players)
+    for player in sorted(players_filtered, key=lambda p: p.goals+p.assists,
+                            reverse=True):
+        print(player)
 
 if __name__ == "__main__":
     main()
