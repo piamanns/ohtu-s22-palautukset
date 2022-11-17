@@ -1,3 +1,4 @@
+import re
 from entities.user import User
 
 
@@ -27,9 +28,12 @@ class UserService:
     def create_user(self, username, password):
         self.validate(username, password)
 
-        user = self._user_repository.create(
-            User(username, password)
-        )
+        try: 
+            user = self._user_repository.create(
+                User(username, password)
+            )
+        except Exception as error:
+            raise AuthenticationError(error)
 
         return user
 
@@ -38,3 +42,12 @@ class UserService:
             raise UserInputError("Username and password are required")
 
         # toteuta loput tarkastukset tänne ja nosta virhe virhetilanteissa
+        if len(username) < 3:
+            raise UserInputError("Username is too short (min 3 characters)")
+        if not re.match("^[a-z]+$", username):
+            raise UserInputError("Username contains forbidden characters (only a-z allowed)")
+
+        if len(password) < 8:
+            raise UserInputError("Password is too short (min 8 characters)")
+        if re.match("^[a-z]+$", password):
+            raise UserInputError("Password cannot contain only letters")
