@@ -19,7 +19,7 @@ Login With Incorrect Password
 
 Login With Nonexistent Username
     Set Username  foobar
-    Set Password  f00b4rpass
+    Set Password  kalle456
     Submit Credentials
     Login Should Fail With Message  Invalid username or password
 
