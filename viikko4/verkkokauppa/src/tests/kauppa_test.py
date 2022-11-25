@@ -120,3 +120,27 @@ class TestKauppa(unittest.TestCase):
         self.kauppa.tilimaksu("tiina", "98765")
 
         self.pankki_mock.tilisiirto.assert_called_with(ANY, 3, ANY, ANY, ANY)
+
+    def test_kun_tuote_poistetaan_ostoskorista_varaston_metodia_palauta_varastoon_kutsutaan_oikeilla_arvoilla(self):
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.lisaa_koriin(2)
+
+        # poistetaan tuote korista
+        self.kauppa.poista_korista(1)
+
+        # varmistetaan, että metodia palauta_varastoon kutsutaan oikeilla arvoilla
+        self.varasto_mock.palauta_varastoon.assert_called_with(Tuote(1, "maito", 5))
+
+    def test_kun_tuote_poistetaan_ostoskorista_sen_hinta_poistuu_ostoskorin_arvosta(self):
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.lisaa_koriin(2)
+
+        # poistetaan tuote korista
+        self.kauppa.poista_korista(1)
+
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        # varmistetaan, että tuotteen hinta ei enää vaikuta ostoskorin hintaan
+        self.pankki_mock.tilisiirto.assert_called_with(ANY, ANY, ANY, ANY, 7)
