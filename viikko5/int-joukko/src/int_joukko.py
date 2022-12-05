@@ -98,10 +98,8 @@ class IntJoukko:
         joukko_b = b.to_int_list()
 
         for alkio in joukko_a:
-            uusi_joukko.lisaa(alkio)
-
-        for alkio in joukko_b:
-            uusi_joukko.poista(alkio)
+            if alkio not in joukko_b:
+                uusi_joukko.lisaa(alkio)
 
         return uusi_joukko
 
