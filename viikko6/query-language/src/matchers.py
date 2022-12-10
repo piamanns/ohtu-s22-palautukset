@@ -40,10 +40,9 @@ class Not:
 
     def test(self, player):
         for matcher in self._matchers:
-            if not matcher.test(player):
-                return True
-
-        return False
+            if matcher.test(player):
+                return False
+        return True
 
 
 class HasFewerThan:
